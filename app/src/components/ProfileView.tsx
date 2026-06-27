@@ -3,7 +3,7 @@
  */
 
 import type { Profile } from "../engine/types";
-import { DISH_SUGGESTIONS } from "../data/dish-suggestions";
+import { DISH_SUGGESTIONS, type DishSuggestion } from "../data/dish-suggestions";
 
 interface ProfileViewProps {
   profile: Profile;
@@ -46,7 +46,15 @@ export function ProfileView({ profile, shareUrl, onShare, onRetake, lowSignal }:
               )}
               {dishes.length > 0 && (
                 <p className="dishes">
-                  Try: {dishes.slice(0, 3).join(" · ")}
+                  Recipes:{" "}
+                  {dishes.slice(0, 3).map((d: DishSuggestion, i: number) => (
+                    <span key={d.name}>
+                      {i > 0 && " · "}
+                      <a href={d.url} target="_blank" rel="noopener noreferrer" className="dish-link">
+                        {d.name}
+                      </a>
+                    </span>
+                  ))}
                 </p>
               )}
             </div>

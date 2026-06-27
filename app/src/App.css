@@ -500,9 +500,21 @@ body {
 
 .dishes {
   font-size: 0.875rem;
-  color: var(--ember);
+  color: var(--ink-soft);
   margin: 0.35rem 0 0;
+  font-weight: 600;
+}
+
+.dish-link {
+  color: var(--ember);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
   font-weight: 700;
+}
+
+.dish-link:hover {
+  color: var(--ember-hover);
 }
 
 .llm-prompt {
