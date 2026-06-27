@@ -57,6 +57,10 @@ function normalize(v: number[]): number[] {
 /**
  * Build a user preference vector from quiz ratings and ingredient embeddings.
  *
+ * Mean-centers ratings before accumulation so users who loved most ingredients
+ * still get discriminating profiles — the vector reflects relative preferences,
+ * not raw enthusiasm.
+ *
  * Args:
  *   ratings: Array of user ratings (only scored ingredients, not skipped).
  *   embeddings: Matrix of ingredient embeddings (one row per quiz ingredient).
@@ -71,10 +75,16 @@ export function buildPreferenceVector(
   const dim = embeddings[0].length;
   const prefVector = new Array(dim).fill(0);
 
+  if (ratings.length === 0) return prefVector;
+
+  // Mean-center so "loved everything" users still discriminate by relative preference.
+  const mean = ratings.reduce((s, r) => s + r.value, 0) / ratings.length;
+
   for (const { ingredientIndex, value } of ratings) {
+    const centered = value - mean;
     const embedding = embeddings[ingredientIndex];
     for (let i = 0; i < dim; i++) {
-      prefVector[i] += value * embedding[i];
+      prefVector[i] += centered * embedding[i];
     }
   }
 

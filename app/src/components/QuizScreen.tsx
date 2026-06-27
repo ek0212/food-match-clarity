@@ -8,11 +8,12 @@ import type { QuizCard, Rating, RatingValue } from "../engine/types";
 interface QuizScreenProps {
   cards: QuizCard[];
   onComplete: (ratings: Rating[]) => void;
+  onQuit: () => void;
 }
 
 type CardResponse = { type: "rated"; value: RatingValue } | { type: "skipped" };
 
-export function QuizScreen({ cards, onComplete }: QuizScreenProps) {
+export function QuizScreen({ cards, onComplete, onQuit }: QuizScreenProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [responses, setResponses] = useState<(CardResponse | null)[]>(
     () => new Array(cards.length).fill(null)
@@ -68,13 +69,22 @@ export function QuizScreen({ cards, onComplete }: QuizScreenProps) {
     onComplete(ratings);
   }
 
+  function handleUndo(): void {
+    if (currentIndex === 0 || animating) return;
+    const newResponses = [...responses];
+    newResponses[currentIndex - 1] = null;
+    setResponses(newResponses);
+    setCurrentIndex(currentIndex - 1);
+  }
+
   const handleKeyDown = useCallback((e: KeyboardEvent): void => {
     if (animating) return;
     switch (e.key) {
-      case "ArrowLeft":  handleRate(1);   break; // Love
-      case "ArrowRight": handleRate(-1);  break; // Not for me
-      case "ArrowUp":    handleRate(0);   break; // Fine
-      case "ArrowDown":  handleSkip();    break; // Skip
+      case "ArrowLeft":   handleRate(1);   break; // Love
+      case "ArrowRight":  handleRate(-1);  break; // Not for me
+      case "ArrowUp":     handleRate(0);   break; // Fine
+      case "ArrowDown":   handleSkip();    break; // Skip
+      case "Backspace":   handleUndo();    break; // Undo
     }
   }, [animating, currentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -87,9 +97,15 @@ export function QuizScreen({ cards, onComplete }: QuizScreenProps) {
 
   return (
     <div className="quiz-screen">
-      <div className="progress-bar">
-        <div className="progress-fill" style={{ width: `${progress}%` }} />
-        <span className="progress-text">{currentIndex + 1} / {cards.length}</span>
+      <div className="quiz-topbar">
+        <button className="quit-btn" onClick={onQuit}>← Home</button>
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: `${progress}%` }} />
+          <span className="progress-text">{currentIndex + 1} / {cards.length}</span>
+        </div>
+        <button className="undo-btn" onClick={handleUndo} disabled={currentIndex === 0 || animating}>
+          ↩ Undo
+        </button>
       </div>
 
       <div className={cardClass} key={currentIndex}>

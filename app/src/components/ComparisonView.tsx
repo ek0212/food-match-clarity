@@ -7,13 +7,17 @@ import type { Comparison } from "../engine/types";
 interface ComparisonViewProps {
   comparison: Comparison;
   friendName?: string;
+  onRetake: () => void;
 }
 
-export function ComparisonView({ comparison }: ComparisonViewProps) {
+export function ComparisonView({ comparison, onRetake }: ComparisonViewProps) {
   const { sharedGround, conflicts, bridges, eatTogether } = comparison;
 
   return (
     <div className="comparison-view">
+      <div className="profile-topbar">
+        <button className="retake-btn" onClick={onRetake}>↩ Retake Quiz</button>
+      </div>
       <h2>Your Food Compatibility</h2>
 
       <section className="shared-section">

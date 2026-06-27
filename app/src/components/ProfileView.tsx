@@ -8,10 +8,11 @@ interface ProfileViewProps {
   profile: Profile;
   shareUrl: string;
   onShare: () => void;
+  onRetake: () => void;
   lowSignal?: boolean;
 }
 
-export function ProfileView({ profile, shareUrl, onShare, lowSignal }: ProfileViewProps) {
+export function ProfileView({ profile, shareUrl, onShare, onRetake, lowSignal }: ProfileViewProps) {
   const topCuisines = profile.cuisineScores.slice(0, 3);
   const topModes = profile.modeAffinities.slice(0, 5);
 
@@ -19,6 +20,9 @@ export function ProfileView({ profile, shareUrl, onShare, lowSignal }: ProfileVi
 
   return (
     <div className="profile-view">
+      <div className="profile-topbar">
+        <button className="retake-btn" onClick={onRetake}>↩ Retake Quiz</button>
+      </div>
       <h2>Your Palate Profile</h2>
 
       {lowSignal && (

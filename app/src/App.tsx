@@ -41,7 +41,24 @@ function App() {
   }, []);
 
   function handleStartQuiz(): void {
+    setMyProfile(null);
+    setComparison(null);
+    setRatingCount(0);
     setPhase("quiz");
+  }
+
+  function handleRetake(): void {
+    setMyProfile(null);
+    setComparison(null);
+    setRatingCount(0);
+    setPhase("quiz");
+  }
+
+  function handleQuitToHome(): void {
+    setMyProfile(null);
+    setComparison(null);
+    setRatingCount(0);
+    setPhase("intro");
   }
 
   function handleQuizComplete(ratings: Rating[]): void {
@@ -87,7 +104,7 @@ function App() {
       )}
 
       {phase === "quiz" && (
-        <QuizScreen cards={QUIZ_DECK} onComplete={handleQuizComplete} />
+        <QuizScreen cards={QUIZ_DECK} onComplete={handleQuizComplete} onQuit={handleQuitToHome} />
       )}
 
       {phase === "profile" && myProfile && (
@@ -95,6 +112,7 @@ function App() {
           profile={myProfile}
           shareUrl={shareUrl}
           onShare={handleShare}
+          onRetake={handleRetake}
           lowSignal={lowSignal}
         />
       )}
@@ -105,9 +123,10 @@ function App() {
             profile={myProfile}
             shareUrl={shareUrl}
             onShare={handleShare}
+            onRetake={handleRetake}
             lowSignal={lowSignal}
           />
-          <ComparisonView comparison={comparison} />
+          <ComparisonView comparison={comparison} onRetake={handleRetake} />
         </div>
       )}
     </div>
