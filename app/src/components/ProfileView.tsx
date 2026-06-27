@@ -2,6 +2,7 @@
  * Profile display: shows the user's palate results in plain language.
  */
 
+import { useState } from "react";
 import type { Profile } from "../engine/types";
 import { DISH_SUGGESTIONS, type DishSuggestion } from "../data/dish-suggestions";
 import { INGREDIENT_GROUP } from "../data/ingredient-groups";
@@ -25,14 +26,13 @@ export function ProfileView({
   profile,
   ingredientRatings,
   shareUrl,
-  onShare,
   onRetake,
   lowSignal,
 }: ProfileViewProps) {
-  const topCuisines = profile.cuisineScores.slice(0, 3);
-  const llmPrompt = generateLlmPrompt(profile);
+  const [copied, setCopied] = useState<"prompt" | "link" | null>(null);
 
-  // Build disliked set for dish filtering
+  const topCuisines = profile.cuisineScores.slice(0, 3);
+
   const dislikedNames = new Set(
     ingredientRatings.filter((r) => r.value === -1).map((r) => r.name)
   );
@@ -42,7 +42,15 @@ export function ProfileView({
     return !dish.keyIngredients.some((ing) => dislikedNames.has(ing));
   }
 
-  // Build ingredient clusters grouped by cuisine family
+  function copy(text: string, key: "prompt" | "link"): void {
+    navigator.clipboard.writeText(text);
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
+  }
+
+  const llmPrompt = generateLlmPrompt(profile, ingredientRatings);
+
+  // Build ingredient clusters
   const groups: Record<string, IngredientRating[]> = {};
   for (const r of ingredientRatings) {
     const group = INGREDIENT_GROUP[r.name] ?? "Other";
@@ -50,7 +58,6 @@ export function ProfileView({
     groups[group].push(r);
   }
 
-  // Sort groups: most loved ingredients first
   const sortedGroups = Object.entries(groups).sort(([, a], [, b]) => {
     const loveA = a.filter((r) => r.value === 1).length;
     const loveB = b.filter((r) => r.value === 1).length;
@@ -133,11 +140,16 @@ export function ProfileView({
 
       <section className="actions-section">
         <h3>Find a Restaurant</h3>
-        <p>Paste this into ChatGPT or any AI assistant:</p>
+        <p style={{ fontSize: "0.9rem", color: "var(--ink-mid)", marginBottom: "0.75rem" }}>
+          Paste this into ChatGPT, Claude, or any AI assistant:
+        </p>
         <div className="llm-prompt">
           <pre>{llmPrompt}</pre>
-          <button onClick={() => navigator.clipboard.writeText(llmPrompt)}>
-            Copy Prompt
+          <button
+            className={copied === "prompt" ? "copy-btn copied" : "copy-btn"}
+            onClick={() => copy(llmPrompt, "prompt")}
+          >
+            {copied === "prompt" ? "✓ Copied!" : "Copy Prompt"}
           </button>
         </div>
       </section>
@@ -147,8 +159,11 @@ export function ProfileView({
         <p style={{ fontSize: "0.9rem", color: "var(--ink-mid)", marginBottom: "1rem" }}>
           Send them your link. When they take the quiz you'll see your compatibility score.
         </p>
-        <button className="share-cta-btn" onClick={onShare}>
-          📋 Copy My Profile Link
+        <button
+          className={`share-cta-btn${copied === "link" ? " copied" : ""}`}
+          onClick={() => copy(shareUrl, "link")}
+        >
+          {copied === "link" ? "✓ Link Copied!" : "📋 Copy My Profile Link"}
         </button>
         <p className="share-cta-hint">{shareUrl}</p>
       </section>
@@ -156,11 +171,43 @@ export function ProfileView({
   );
 }
 
-function generateLlmPrompt(profile: Profile): string {
+/**
+ * Generate a rich LLM prompt from the profile and ingredient ratings.
+ */
+function generateLlmPrompt(profile: Profile, ingredientRatings: IngredientRating[]): string {
   const cuisines = profile.cuisineScores.slice(0, 3).map((c) => c.label).join(", ");
-  return `I'm looking for restaurant recommendations near me. My taste profile:
 
-- I gravitate toward ${cuisines} cuisines
+  const loved = ingredientRatings
+    .filter((r) => r.value === 1)
+    .map((r) => r.name)
+    .slice(0, 12)
+    .join(", ");
 
-Suggest 3-5 restaurants or restaurant types that match these preferences. For each, explain which aspect of my palate it would satisfy.`;
+  const disliked = ingredientRatings
+    .filter((r) => r.value === -1)
+    .map((r) => r.name);
+
+  const dislikedLine = disliked.length > 0
+    ? `\n- I dislike or can't eat: ${disliked.join(", ")}`
+    : "";
+
+  const contributors = profile.cuisineScores
+    .slice(0, 3)
+    .flatMap((c) => c.topContributors)
+    .filter((v, i, a) => a.indexOf(v) === i)
+    .slice(0, 6)
+    .join(", ");
+
+  return `I'm looking for restaurant recommendations near [your city/neighbourhood].
+
+My taste profile:
+- Top cuisines: ${cuisines}
+- Ingredients I love: ${loved || contributors}${dislikedLine}
+
+Please recommend 3–5 restaurants or restaurant types that match my palate. For each:
+1. Name the cuisine style or dish type
+2. Explain which of my loved flavours it features
+3. Suggest 1–2 specific dishes to order
+
+${disliked.length > 0 ? `Avoid dishes that prominently feature: ${disliked.join(", ")}` : ""}`.trim();
 }
