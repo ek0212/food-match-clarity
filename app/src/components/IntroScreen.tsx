@@ -28,7 +28,7 @@ export function IntroScreen({ onStart, hasFriendProfile }: IntroScreenProps) {
         </p>
         <p>
           This quiz uses that ingredient map to figure out your palate in about 5 minutes.
-          You'll rate 30 ingredients, and the app will tell you which cuisines you gravitate
+          You'll rate 50 ingredients, and the app will tell you which cuisines you gravitate
           toward, which flavor neighborhoods you belong to, and what dishes to try next.
         </p>
         <p>

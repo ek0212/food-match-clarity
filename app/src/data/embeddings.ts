@@ -9,7 +9,7 @@ import embeddingsData from "./generated/embeddings.json";
 import cuisineData from "./generated/cuisine-vectors.json";
 import modeData from "./generated/mode-atlas.json";
 
-// Quiz ingredient embeddings (30 × 300)
+// Quiz ingredient embeddings (50 × 300)
 export const EMBEDDINGS: number[][] = embeddingsData;
 
 // Cuisine direction vectors (8 × 300)

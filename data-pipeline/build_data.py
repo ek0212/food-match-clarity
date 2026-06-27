@@ -28,34 +28,46 @@ CUISINE_SEEDS = {
     "eastern_european": "lamb",
 }
 
-# Manually curated 30 quiz ingredients.
-# Criteria: recognizable, cuisine-anchored, includes polarizing items for discrimination.
+# Manually curated 50 quiz ingredients.
+# Criteria: recognizable, cuisine-anchored, covers meat/plant divide for discrimination.
 QUIZ_INGREDIENTS = [
     # South Asian anchors
     ("ghee", "Clarified butter used in South Asian cooking"),
     ("cumin", "Earthy spice central to Indian and Middle Eastern dishes"),
     ("lentil", "Protein-rich legume in dal, soups, and stews"),
     ("turmeric", "Golden spice in curries and rice dishes"),
+    ("cardamom", "Fragrant spice in Indian chai, biryanis, and Middle Eastern coffee"),
+    ("tamarind", "Sour pod in Indian chutneys, pad thai, and barbecue sauces"),
     # East Asian anchors
     ("soy sauce", "Fermented seasoning in Chinese, Japanese, and Korean cooking"),
     ("sesame oil", "Nutty finishing oil in East Asian dishes"),
     ("ginger", "Sharp, warming root used across Asian cuisines"),
     ("tofu", "Soy protein in stir-fries, soups, and curries"),
+    # Japanese specifics
+    ("miso", "Fermented soybean paste in Japanese soups, ramen, and glazes"),
+    ("mirin", "Sweet Japanese rice wine in teriyaki and braising sauces"),
+    ("nori", "Toasted seaweed sheets in sushi, ramen, and onigiri"),
+    # Korean specifics
+    ("gochujang", "Fermented Korean chili paste in bibimbap, stews, and marinades"),
+    ("kimchi", "Spicy fermented cabbage at the center of Korean cooking"),
     # Mediterranean anchors
     ("olive oil", "Foundational fat in Mediterranean cooking"),
     ("basil", "Fresh herb in Italian pasta, pizza, and salads"),
     ("feta cheese", "Tangy crumbled cheese in Greek and Middle Eastern dishes"),
     ("chickpea", "Versatile legume in hummus, falafel, and stews"),
+    ("thyme", "Woody herb in French, Mediterranean, and roasted dishes"),
     # Latin American anchors
-    ("cilantro", "Bright herb in Mexican, Thai, and Indian cooking"),
+    ("coriander", "Bright herb in Mexican, Thai, and Indian cooking"),
     ("avocado", "Creamy fruit in guacamole, tacos, and salads"),
     ("black bean", "Staple legume in Latin American rice and burritos"),
     ("chipotle", "Smoky dried jalapeño in Mexican sauces"),
+    ("lime", "Bright citrus in Mexican, Thai, and Vietnamese cooking"),
+    ("jalapeno", "Fresh green chili in salsas, nachos, and pickles"),
     # Western/Atlantic anchors
     ("butter", "Rich dairy fat in French and American cooking"),
     ("bacon", "Cured smoked pork in breakfasts and sandwiches"),
     ("cheddar cheese", "Sharp aged cheese in British and American dishes"),
-    ("mushroom", "Earthy fungi in risotto, stir-fries, and soups"),
+    ("cream", "Rich dairy in French sauces, gratins, and chowders"),
     # Southeast Asian anchors
     ("coconut milk", "Creamy base in Thai and Indonesian curries"),
     ("lemongrass", "Citrusy stalk in Thai and Vietnamese soups"),
@@ -63,11 +75,22 @@ QUIZ_INGREDIENTS = [
     # Middle Eastern / North African anchors
     ("tahini", "Sesame paste in hummus and Middle Eastern dressings"),
     ("pomegranate", "Tart fruit seeds in salads and Persian stews"),
+    ("harissa", "Fiery North African chili paste in stews and roasted vegetables"),
+    # Eastern European anchors
+    ("dill", "Grassy herb in Eastern European, Scandinavian, and Jewish cooking"),
+    # Protein anchors — critical for omnivore/plant-based discrimination
+    ("beef", "Hearty red meat in burgers, stews, and Korean barbecue"),
+    ("lamb", "Tender red meat in Middle Eastern, Mediterranean, and South Asian stews"),
+    ("shrimp", "Sweet shellfish in stir-fries, paella, and Vietnamese cooking"),
+    ("salmon", "Rich fish in Japanese, Scandinavian, and Pacific cooking"),
     # Polarizing/discriminating ingredients
+    ("mushroom", "Earthy fungi in risotto, stir-fries, and soups"),
     ("blue cheese", "Strong aged cheese with bold funky flavor"),
-    ("cilantro", None),  # duplicate - will be handled
     ("anchovy", "Small salted fish used in Caesar dressing and pizza"),
-    # Bridge ingredients
+    # Sweet / dessert dimension
+    ("chocolate", "Bitter-rich cacao in desserts, Mexican mole, and drinks"),
+    ("vanilla", "Floral pod in ice cream, baking, and custards worldwide"),
+    # Bridge / universal ingredients
     ("rice", "Staple grain across Asian, Latin, and Middle Eastern cuisines"),
     ("garlic", "Aromatic base in nearly every world cuisine"),
     ("chili pepper", "Heat element across Asian, Latin, and Mediterranean dishes"),
@@ -162,7 +185,7 @@ def select_quiz_ingredients(
     seen_names = set()
     
     for item in QUIZ_INGREDIENTS:
-        if len(selected) >= 30:
+        if len(selected) >= 50:
             break
         name = item[0]
         context = item[1] if len(item) > 1 else None

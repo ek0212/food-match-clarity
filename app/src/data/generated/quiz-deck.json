@@ -20,133 +20,233 @@
     "embeddingIndex": 3
   },
   {
+    "name": "Cardamom",
+    "context": "Fragrant spice in Indian chai, biryanis, and Middle Eastern coffee",
+    "embeddingIndex": 4
+  },
+  {
+    "name": "Tamarind",
+    "context": "Sour pod in Indian chutneys, pad thai, and barbecue sauces",
+    "embeddingIndex": 5
+  },
+  {
     "name": "Soy Sauce",
     "context": "Fermented seasoning in Chinese, Japanese, and Korean cooking",
-    "embeddingIndex": 4
+    "embeddingIndex": 6
   },
   {
     "name": "Sesame Oil",
     "context": "Nutty finishing oil in East Asian dishes",
-    "embeddingIndex": 5
+    "embeddingIndex": 7
   },
   {
     "name": "Ginger",
     "context": "Sharp, warming root used across Asian cuisines",
-    "embeddingIndex": 6
+    "embeddingIndex": 8
   },
   {
     "name": "Tofu",
     "context": "Soy protein in stir-fries, soups, and curries",
-    "embeddingIndex": 7
+    "embeddingIndex": 9
+  },
+  {
+    "name": "Miso",
+    "context": "Fermented soybean paste in Japanese soups, ramen, and glazes",
+    "embeddingIndex": 10
+  },
+  {
+    "name": "Mirin",
+    "context": "Sweet Japanese rice wine in teriyaki and braising sauces",
+    "embeddingIndex": 11
+  },
+  {
+    "name": "Nori",
+    "context": "Toasted seaweed sheets in sushi, ramen, and onigiri",
+    "embeddingIndex": 12
+  },
+  {
+    "name": "Gochujang",
+    "context": "Fermented Korean chili paste in bibimbap, stews, and marinades",
+    "embeddingIndex": 13
+  },
+  {
+    "name": "Kimchi",
+    "context": "Spicy fermented cabbage at the center of Korean cooking",
+    "embeddingIndex": 14
   },
   {
     "name": "Olive Oil",
     "context": "Foundational fat in Mediterranean cooking",
-    "embeddingIndex": 8
+    "embeddingIndex": 15
   },
   {
     "name": "Basil",
     "context": "Fresh herb in Italian pasta, pizza, and salads",
-    "embeddingIndex": 9
+    "embeddingIndex": 16
   },
   {
     "name": "Feta Cheese",
     "context": "Tangy crumbled cheese in Greek and Middle Eastern dishes",
-    "embeddingIndex": 10
+    "embeddingIndex": 17
   },
   {
     "name": "Chickpea",
     "context": "Versatile legume in hummus, falafel, and stews",
-    "embeddingIndex": 11
+    "embeddingIndex": 18
+  },
+  {
+    "name": "Thyme",
+    "context": "Woody herb in French, Mediterranean, and roasted dishes",
+    "embeddingIndex": 19
+  },
+  {
+    "name": "Coriander",
+    "context": "Bright herb in Mexican, Thai, and Indian cooking",
+    "embeddingIndex": 20
   },
   {
     "name": "Avocado",
     "context": "Creamy fruit in guacamole, tacos, and salads",
-    "embeddingIndex": 12
+    "embeddingIndex": 21
   },
   {
     "name": "Black Bean",
     "context": "Staple legume in Latin American rice and burritos",
-    "embeddingIndex": 13
+    "embeddingIndex": 22
   },
   {
     "name": "Chipotle",
     "context": "Smoky dried jalape\u00f1o in Mexican sauces",
-    "embeddingIndex": 14
+    "embeddingIndex": 23
+  },
+  {
+    "name": "Lime",
+    "context": "Bright citrus in Mexican, Thai, and Vietnamese cooking",
+    "embeddingIndex": 24
+  },
+  {
+    "name": "Jalapeno",
+    "context": "Fresh green chili in salsas, nachos, and pickles",
+    "embeddingIndex": 25
   },
   {
     "name": "Butter",
     "context": "Rich dairy fat in French and American cooking",
-    "embeddingIndex": 15
+    "embeddingIndex": 26
   },
   {
     "name": "Bacon",
     "context": "Cured smoked pork in breakfasts and sandwiches",
-    "embeddingIndex": 16
+    "embeddingIndex": 27
   },
   {
     "name": "Cheddar Cheese",
     "context": "Sharp aged cheese in British and American dishes",
-    "embeddingIndex": 17
+    "embeddingIndex": 28
   },
   {
-    "name": "Mushroom",
-    "context": "Earthy fungi in risotto, stir-fries, and soups",
-    "embeddingIndex": 18
+    "name": "Cream",
+    "context": "Rich dairy in French sauces, gratins, and chowders",
+    "embeddingIndex": 29
   },
   {
     "name": "Coconut Milk",
     "context": "Creamy base in Thai and Indonesian curries",
-    "embeddingIndex": 19
+    "embeddingIndex": 30
   },
   {
     "name": "Lemongrass",
     "context": "Citrusy stalk in Thai and Vietnamese soups",
-    "embeddingIndex": 20
+    "embeddingIndex": 31
   },
   {
     "name": "Fish Sauce",
     "context": "Pungent fermented seasoning in Southeast Asian cooking",
-    "embeddingIndex": 21
+    "embeddingIndex": 32
   },
   {
     "name": "Tahini",
     "context": "Sesame paste in hummus and Middle Eastern dressings",
-    "embeddingIndex": 22
+    "embeddingIndex": 33
   },
   {
     "name": "Pomegranate",
     "context": "Tart fruit seeds in salads and Persian stews",
-    "embeddingIndex": 23
+    "embeddingIndex": 34
+  },
+  {
+    "name": "Harissa",
+    "context": "Fiery North African chili paste in stews and roasted vegetables",
+    "embeddingIndex": 35
+  },
+  {
+    "name": "Dill",
+    "context": "Grassy herb in Eastern European, Scandinavian, and Jewish cooking",
+    "embeddingIndex": 36
+  },
+  {
+    "name": "Beef",
+    "context": "Hearty red meat in burgers, stews, and Korean barbecue",
+    "embeddingIndex": 37
+  },
+  {
+    "name": "Lamb",
+    "context": "Tender red meat in Middle Eastern, Mediterranean, and South Asian stews",
+    "embeddingIndex": 38
+  },
+  {
+    "name": "Shrimp",
+    "context": "Sweet shellfish in stir-fries, paella, and Vietnamese cooking",
+    "embeddingIndex": 39
+  },
+  {
+    "name": "Salmon",
+    "context": "Rich fish in Japanese, Scandinavian, and Pacific cooking",
+    "embeddingIndex": 40
+  },
+  {
+    "name": "Mushroom",
+    "context": "Earthy fungi in risotto, stir-fries, and soups",
+    "embeddingIndex": 41
   },
   {
     "name": "Blue Cheese",
     "context": "Strong aged cheese with bold funky flavor",
-    "embeddingIndex": 24
+    "embeddingIndex": 42
   },
   {
     "name": "Anchovy",
     "context": "Small salted fish used in Caesar dressing and pizza",
-    "embeddingIndex": 25
+    "embeddingIndex": 43
+  },
+  {
+    "name": "Chocolate",
+    "context": "Bitter-rich cacao in desserts, Mexican mole, and drinks",
+    "embeddingIndex": 44
+  },
+  {
+    "name": "Vanilla",
+    "context": "Floral pod in ice cream, baking, and custards worldwide",
+    "embeddingIndex": 45
   },
   {
     "name": "Rice",
     "context": "Staple grain across Asian, Latin, and Middle Eastern cuisines",
-    "embeddingIndex": 26
+    "embeddingIndex": 46
   },
   {
     "name": "Garlic",
     "context": "Aromatic base in nearly every world cuisine",
-    "embeddingIndex": 27
+    "embeddingIndex": 47
   },
   {
     "name": "Chili Pepper",
     "context": "Heat element across Asian, Latin, and Mediterranean dishes",
-    "embeddingIndex": 28
+    "embeddingIndex": 48
   },
   {
     "name": "Honey",
     "context": "Natural sweetener in baking, glazes, and dressings worldwide",
-    "embeddingIndex": 29
+    "embeddingIndex": 49
   }
 ]

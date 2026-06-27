@@ -1,5 +1,5 @@
 /**
- * Quiz deck: the 30 fixed ingredients shown to every user.
+ * Quiz deck: the 50 fixed ingredients shown to every user.
  *
  * Generated from Epicure's epicure_cooc.csv using cuisine-anchored selection.
  * See data-pipeline/build_data.py for the selection logic.
