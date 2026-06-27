@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Ghee",
+    "context": "Clarified butter used in South Asian cooking",
+    "embeddingIndex": 0
+  },
+  {
+    "name": "Cumin",
+    "context": "Earthy spice central to Indian and Middle Eastern dishes",
+    "embeddingIndex": 1
+  },
+  {
+    "name": "Lentil",
+    "context": "Protein-rich legume in dal, soups, and stews",
+    "embeddingIndex": 2
+  },
+  {
+    "name": "Turmeric",
+    "context": "Golden spice in curries and rice dishes",
+    "embeddingIndex": 3
+  },
+  {
+    "name": "Soy Sauce",
+    "context": "Fermented seasoning in Chinese, Japanese, and Korean cooking",
+    "embeddingIndex": 4
+  },
+  {
+    "name": "Sesame Oil",
+    "context": "Nutty finishing oil in East Asian dishes",
+    "embeddingIndex": 5
+  },
+  {
+    "name": "Ginger",
+    "context": "Sharp, warming root used across Asian cuisines",
+    "embeddingIndex": 6
+  },
+  {
+    "name": "Tofu",
+    "context": "Soy protein in stir-fries, soups, and curries",
+    "embeddingIndex": 7
+  },
+  {
+    "name": "Olive Oil",
+    "context": "Foundational fat in Mediterranean cooking",
+    "embeddingIndex": 8
+  },
+  {
+    "name": "Basil",
+    "context": "Fresh herb in Italian pasta, pizza, and salads",
+    "embeddingIndex": 9
+  },
+  {
+    "name": "Feta Cheese",
+    "context": "Tangy crumbled cheese in Greek and Middle Eastern dishes",
+    "embeddingIndex": 10
+  },
+  {
+    "name": "Chickpea",
+    "context": "Versatile legume in hummus, falafel, and stews",
+    "embeddingIndex": 11
+  },
+  {
+    "name": "Avocado",
+    "context": "Creamy fruit in guacamole, tacos, and salads",
+    "embeddingIndex": 12
+  },
+  {
+    "name": "Black Bean",
+    "context": "Staple legume in Latin American rice and burritos",
+    "embeddingIndex": 13
+  },
+  {
+    "name": "Chipotle",
+    "context": "Smoky dried jalape\u00f1o in Mexican sauces",
+    "embeddingIndex": 14
+  },
+  {
+    "name": "Butter",
+    "context": "Rich dairy fat in French and American cooking",
+    "embeddingIndex": 15
+  },
+  {
+    "name": "Bacon",
+    "context": "Cured smoked pork in breakfasts and sandwiches",
+    "embeddingIndex": 16
+  },
+  {
+    "name": "Cheddar Cheese",
+    "context": "Sharp aged cheese in British and American dishes",
+    "embeddingIndex": 17
+  },
+  {
+    "name": "Mushroom",
+    "context": "Earthy fungi in risotto, stir-fries, and soups",
+    "embeddingIndex": 18
+  },
+  {
+    "name": "Coconut Milk",
+    "context": "Creamy base in Thai and Indonesian curries",
+    "embeddingIndex": 19
+  },
+  {
+    "name": "Lemongrass",
+    "context": "Citrusy stalk in Thai and Vietnamese soups",
+    "embeddingIndex": 20
+  },
+  {
+    "name": "Fish Sauce",
+    "context": "Pungent fermented seasoning in Southeast Asian cooking",
+    "embeddingIndex": 21
+  },
+  {
+    "name": "Tahini",
+    "context": "Sesame paste in hummus and Middle Eastern dressings",
+    "embeddingIndex": 22
+  },
+  {
+    "name": "Pomegranate",
+    "context": "Tart fruit seeds in salads and Persian stews",
+    "embeddingIndex": 23
+  },
+  {
+    "name": "Blue Cheese",
+    "context": "Strong aged cheese with bold funky flavor",
+    "embeddingIndex": 24
+  },
+  {
+    "name": "Anchovy",
+    "context": "Small salted fish used in Caesar dressing and pizza",
+    "embeddingIndex": 25
+  },
+  {
+    "name": "Rice",
+    "context": "Staple grain across Asian, Latin, and Middle Eastern cuisines",
+    "embeddingIndex": 26
+  },
+  {
+    "name": "Garlic",
+    "context": "Aromatic base in nearly every world cuisine",
+    "embeddingIndex": 27
+  },
+  {
+    "name": "Chili Pepper",
+    "context": "Heat element across Asian, Latin, and Mediterranean dishes",
+    "embeddingIndex": 28
+  },
+  {
+    "name": "Honey",
+    "context": "Natural sweetener in baking, glazes, and dressings worldwide",
+    "embeddingIndex": 29
+  }
+]

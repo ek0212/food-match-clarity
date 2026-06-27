@@ -1,0 +1,116 @@
+{
+  "system": "Food Match",
+  "type": "static_web_app",
+  "components": [
+    {
+      "id": "app-shell",
+      "name": "React SPA",
+      "type": "frontend",
+      "trust_boundary": "user_browser",
+      "responsibilities": ["quiz flow", "profile rendering", "comparison view", "URL routing"]
+    },
+    {
+      "id": "scoring-engine",
+      "name": "Scoring Engine",
+      "type": "library",
+      "trust_boundary": "user_browser",
+      "responsibilities": ["dot product computation", "profile building", "comparison logic"]
+    },
+    {
+      "id": "url-codec",
+      "name": "URL Encoder/Decoder",
+      "type": "library",
+      "trust_boundary": "user_browser",
+      "responsibilities": ["profile serialization", "base64 encoding", "bounds-checked decoding"]
+    },
+    {
+      "id": "static-data",
+      "name": "Epicure Data Bundle",
+      "type": "static_asset",
+      "trust_boundary": "user_browser",
+      "responsibilities": ["embeddings for 30 quiz ingredients", "8 cuisine direction vectors", "~150 mode centroids and labels"]
+    },
+    {
+      "id": "cdn",
+      "name": "Static Host / CDN",
+      "type": "infrastructure",
+      "trust_boundary": "external",
+      "responsibilities": ["serve app bundle", "HTTPS termination"]
+    },
+    {
+      "id": "external-llm",
+      "name": "External LLM (user-initiated)",
+      "type": "external_service",
+      "trust_boundary": "external",
+      "responsibilities": ["restaurant finding via user-pasted prompt"]
+    }
+  ],
+  "flows": [
+    {
+      "from": "cdn",
+      "to": "app-shell",
+      "protocol": "HTTPS",
+      "data": "app bundle + static JSON data"
+    },
+    {
+      "from": "app-shell",
+      "to": "scoring-engine",
+      "protocol": "function_call",
+      "data": "ratings array"
+    },
+    {
+      "from": "scoring-engine",
+      "to": "static-data",
+      "protocol": "import",
+      "data": "embeddings, cuisine vectors, mode centroids"
+    },
+    {
+      "from": "scoring-engine",
+      "to": "url-codec",
+      "protocol": "function_call",
+      "data": "profile object"
+    },
+    {
+      "from": "url-codec",
+      "to": "app-shell",
+      "protocol": "url_hash",
+      "data": "base64 encoded profile (~28 chars)"
+    },
+    {
+      "from": "app-shell",
+      "to": "external-llm",
+      "protocol": "user_clipboard",
+      "data": "pre-filled prompt template"
+    }
+  ],
+  "threats": [
+    {
+      "id": "T1",
+      "name": "Malicious URL payload",
+      "severity": "low",
+      "affected_components": ["url-codec", "app-shell"],
+      "mitigation": "Fixed-length binary decode with bounds checking; numeric-only interpretation"
+    },
+    {
+      "id": "T2",
+      "name": "CDN compromise",
+      "severity": "low",
+      "affected_components": ["cdn", "app-shell"],
+      "mitigation": "Subresource integrity hashes; HTTPS only"
+    },
+    {
+      "id": "T3",
+      "name": "LLM prompt injection via profile",
+      "severity": "low",
+      "affected_components": ["external-llm"],
+      "mitigation": "Profile data is numeric; prompt template is app-controlled, not user-editable"
+    },
+    {
+      "id": "T4",
+      "name": "Privacy: quiz answers inferred from URL",
+      "severity": "low",
+      "affected_components": ["url-codec"],
+      "mitigation": "URL contains aggregated scores only, not individual ratings"
+    }
+  ]
+}
