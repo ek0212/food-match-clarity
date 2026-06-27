@@ -4,20 +4,58 @@
 
 import type { Profile } from "../engine/types";
 import { DISH_SUGGESTIONS, type DishSuggestion } from "../data/dish-suggestions";
+import { INGREDIENT_GROUP } from "../data/ingredient-groups";
+import { getEmoji } from "../data/ingredient-emojis";
+
+interface IngredientRating {
+  name: string;
+  value: number;
+}
 
 interface ProfileViewProps {
   profile: Profile;
+  ingredientRatings: IngredientRating[];
   shareUrl: string;
   onShare: () => void;
   onRetake: () => void;
   lowSignal?: boolean;
 }
 
-export function ProfileView({ profile, shareUrl, onShare, onRetake, lowSignal }: ProfileViewProps) {
+export function ProfileView({
+  profile,
+  ingredientRatings,
+  shareUrl,
+  onShare,
+  onRetake,
+  lowSignal,
+}: ProfileViewProps) {
   const topCuisines = profile.cuisineScores.slice(0, 3);
-  const topModes = profile.modeAffinities.slice(0, 5);
-
   const llmPrompt = generateLlmPrompt(profile);
+
+  // Build disliked set for dish filtering
+  const dislikedNames = new Set(
+    ingredientRatings.filter((r) => r.value === -1).map((r) => r.name)
+  );
+
+  function isDishOk(dish: DishSuggestion): boolean {
+    if (!dish.keyIngredients?.length) return true;
+    return !dish.keyIngredients.some((ing) => dislikedNames.has(ing));
+  }
+
+  // Build ingredient clusters grouped by cuisine family
+  const groups: Record<string, IngredientRating[]> = {};
+  for (const r of ingredientRatings) {
+    const group = INGREDIENT_GROUP[r.name] ?? "Other";
+    if (!groups[group]) groups[group] = [];
+    groups[group].push(r);
+  }
+
+  // Sort groups: most loved ingredients first
+  const sortedGroups = Object.entries(groups).sort(([, a], [, b]) => {
+    const loveA = a.filter((r) => r.value === 1).length;
+    const loveB = b.filter((r) => r.value === 1).length;
+    return loveB - loveA;
+  });
 
   return (
     <div className="profile-view">
@@ -38,7 +76,7 @@ export function ProfileView({ profile, shareUrl, onShare, onRetake, lowSignal }:
           const maxScore = Math.max(...topCuisines.map((c) => c.score), 0.001);
           return topCuisines.map((cuisine, idx) => {
             const barPct = Math.round((cuisine.score / maxScore) * 100);
-            const dishes = DISH_SUGGESTIONS[cuisine.direction] ?? [];
+            const dishes = (DISH_SUGGESTIONS[cuisine.direction] ?? []).filter(isDishOk);
             return (
               <div key={cuisine.direction} className="cuisine-result">
                 <div className="cuisine-result-header">
@@ -70,17 +108,28 @@ export function ProfileView({ profile, shareUrl, onShare, onRetake, lowSignal }:
         })()}
       </section>
 
-      <section className="modes-section">
-        <h3>Your Flavor Neighborhoods</h3>
-        {topModes.map((mode) => (
-          <div key={mode.modeIndex} className="mode-result">
-            <strong>{mode.label}</strong>
-            <p className="mode-examples">
-              Your picks: {mode.examples.join(", ")}
-            </p>
+      {sortedGroups.length > 0 && (
+        <section className="ingredient-clusters-section">
+          <h3>Your Ingredients</h3>
+          <div className="ingredient-clusters">
+            {sortedGroups.map(([groupName, items]) => (
+              <div key={groupName} className="ingredient-cluster">
+                <div className="cluster-label">{groupName}</div>
+                <div className="cluster-pills">
+                  {items.map((r) => (
+                    <span
+                      key={r.name}
+                      className={`ingredient-pill ${r.value === 1 ? "loved" : r.value === -1 ? "disliked" : "fine"}`}
+                    >
+                      {getEmoji(r.name)} {r.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </section>
+        </section>
+      )}
 
       <section className="actions-section">
         <h3>Find a Restaurant</h3>
@@ -105,24 +154,11 @@ export function ProfileView({ profile, shareUrl, onShare, onRetake, lowSignal }:
   );
 }
 
-/**
- * Generate an LLM prompt from the profile for restaurant finding.
- */
 function generateLlmPrompt(profile: Profile): string {
-  const cuisines = profile.cuisineScores
-    .slice(0, 3)
-    .map((c) => c.label)
-    .join(", ");
-
-  const flavors = profile.modeAffinities
-    .slice(0, 3)
-    .map((m) => `${m.label} (like ${m.examples.slice(0, 2).join(", ")})`)
-    .join("; ");
-
+  const cuisines = profile.cuisineScores.slice(0, 3).map((c) => c.label).join(", ");
   return `I'm looking for restaurant recommendations near me. My taste profile:
 
 - I gravitate toward ${cuisines} cuisines
-- I especially enjoy: ${flavors}
 
 Suggest 3-5 restaurants or restaurant types that match these preferences. For each, explain which aspect of my palate it would satisfy.`;
 }

@@ -32,6 +32,7 @@ function App() {
   const [comparison, setComparison] = useState<Comparison | null>(null);
   const [shareUrl, setShareUrl] = useState("");
   const [ratingCount, setRatingCount] = useState(0);
+  const [ingredientRatings, setIngredientRatings] = useState<{ name: string; value: number }[]>([]);
 
   useEffect(() => {
     const decoded = getProfileFromUrl();
@@ -51,6 +52,7 @@ function App() {
     setMyProfile(null);
     setComparison(null);
     setRatingCount(0);
+    setIngredientRatings([]);
     setPhase("quiz");
   }
 
@@ -58,12 +60,17 @@ function App() {
     setMyProfile(null);
     setComparison(null);
     setRatingCount(0);
+    setIngredientRatings([]);
     setPhase("intro");
   }
 
   function handleQuizComplete(ratings: Rating[]): void {
     const ingredientNames = QUIZ_DECK.map((card) => card.name);
     setRatingCount(ratings.length);
+    setIngredientRatings(ratings.map((r) => ({
+      name: QUIZ_DECK[r.ingredientIndex].name,
+      value: r.value,
+    })));
 
     const profile = buildProfile(
       ratings,
@@ -110,6 +117,7 @@ function App() {
       {phase === "profile" && myProfile && (
         <ProfileView
           profile={myProfile}
+          ingredientRatings={ingredientRatings}
           shareUrl={shareUrl}
           onShare={handleShare}
           onRetake={handleRetake}
@@ -121,6 +129,7 @@ function App() {
         <div>
           <ProfileView
             profile={myProfile}
+            ingredientRatings={ingredientRatings}
             shareUrl={shareUrl}
             onShare={handleShare}
             onRetake={handleRetake}

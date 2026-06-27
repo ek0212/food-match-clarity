@@ -609,7 +609,68 @@ body {
 .share-url button:hover,
 .llm-prompt button:hover { background: var(--ember-hover); }
 
-/* ─── Comparison View ──────────────────────────────────────────── */
+/* ─── Ingredient Clusters ──────────────────────────────────────── */
+
+.ingredient-clusters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ingredient-cluster {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 0.875rem 1.1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.cluster-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-soft);
+  margin-bottom: 0.6rem;
+}
+
+.cluster-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.ingredient-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  transition: transform 0.1s;
+}
+
+.ingredient-pill.loved {
+  background: var(--love-tint);
+  color: var(--love);
+  border: 1px solid rgba(45, 122, 82, 0.22);
+}
+
+.ingredient-pill.disliked {
+  background: var(--notforme-tint);
+  color: var(--notforme);
+  border: 1px solid rgba(185, 51, 32, 0.2);
+  opacity: 0.75;
+}
+
+.ingredient-pill.fine {
+  background: var(--bg-warm);
+  color: var(--ink-soft);
+  border: 1px solid rgba(30, 20, 10, 0.1);
+}
+
+
 
 .compat-score-block {
   text-align: center;
