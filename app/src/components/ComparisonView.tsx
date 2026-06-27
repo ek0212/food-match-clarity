@@ -11,13 +11,29 @@ interface ComparisonViewProps {
 }
 
 export function ComparisonView({ comparison, onRetake }: ComparisonViewProps) {
-  const { sharedGround, conflicts, bridges, eatTogether } = comparison;
+  const { sharedGround, conflicts, bridges, eatTogether, compatibilityScore } = comparison;
+
+  const scoreLabel =
+    compatibilityScore >= 90 ? "Palate twins 🎉" :
+    compatibilityScore >= 70 ? "Highly compatible" :
+    compatibilityScore >= 45 ? "Good common ground" :
+    compatibilityScore >= 20 ? "Adventurously different" :
+    "Total opposites — fun!";
 
   return (
     <div className="comparison-view">
       <div className="profile-topbar">
         <button className="retake-btn" onClick={onRetake}>↩ Retake Quiz</button>
       </div>
+
+      <div className="compat-score-block">
+        <div className="compat-score-number">{compatibilityScore}%</div>
+        <div className="compat-score-label">{scoreLabel}</div>
+        <div className="compat-score-bar-track">
+          <div className="compat-score-bar-fill" style={{ width: `${compatibilityScore}%` }} />
+        </div>
+      </div>
+
       <h2>Your Food Compatibility</h2>
 
       <section className="shared-section">

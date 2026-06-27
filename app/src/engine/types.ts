@@ -60,6 +60,7 @@ export interface Comparison {
     summary: string;
   }[];
   eatTogether: string;
+  compatibilityScore: number; // 0–100
 }
 
 /** Quiz card definition. */

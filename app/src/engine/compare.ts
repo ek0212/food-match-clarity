@@ -31,6 +31,7 @@ export function compareProfiles(
 
   const sharedSummary = buildSharedSummary(sharedCuisines, sharedModes);
   const eatTogether = buildEatTogetherSuggestion(sharedCuisines, sharedModes);
+  const compatibilityScore = computeCompatibilityScore(profileA, profileB);
 
   return {
     sharedGround: {
@@ -41,7 +42,27 @@ export function compareProfiles(
     conflicts,
     bridges,
     eatTogether,
+    compatibilityScore,
   };
+}
+
+/**
+ * Compute a 0–100 compatibility score from cuisine and mode overlap.
+ */
+function computeCompatibilityScore(profileA: Profile, profileB: Profile): number {
+  const cuisinesA = new Set(profileA.cuisineScores.map((c) => c.direction));
+  const cuisinesB = new Set(profileB.cuisineScores.map((c) => c.direction));
+  const cuisineOverlap = [...cuisinesA].filter((c) => cuisinesB.has(c)).length;
+  const maxCuisine = Math.min(cuisinesA.size, cuisinesB.size);
+  const cuisineScore = maxCuisine > 0 ? cuisineOverlap / maxCuisine : 0;
+
+  const modesA = new Set(profileA.modeAffinities.map((m) => m.modeIndex));
+  const modesB = new Set(profileB.modeAffinities.map((m) => m.modeIndex));
+  const modeOverlap = [...modesA].filter((m) => modesB.has(m)).length;
+  const maxMode = Math.min(modesA.size, modesB.size);
+  const modeScore = maxMode > 0 ? modeOverlap / maxMode : 0;
+
+  return Math.round((cuisineScore * 0.65 + modeScore * 0.35) * 100);
 }
 
 /**

@@ -307,6 +307,15 @@ body {
   to { opacity: 0; transform: translateY(55px) scale(0.91); }
 }
 
+/* Card emoji */
+.card-emoji {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(30, 20, 10, 0.12));
+}
+
 .card-name {
   font-family: var(--font-display);
   font-size: 2.8rem;
@@ -476,6 +485,37 @@ body {
   display: block;
 }
 
+.cuisine-result-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.cuisine-rank {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cuisine-bar-track {
+  width: 100%;
+  height: 5px;
+  background: rgba(30, 20, 10, 0.08);
+  border-radius: 100px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.cuisine-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ember) 0%, rgba(224, 85, 30, 0.55) 100%);
+  border-radius: 100px;
+  transition: width 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 .mode-result {
   margin-bottom: 0.75rem;
   padding: 0.9rem 1.2rem;
@@ -570,6 +610,49 @@ body {
 .llm-prompt button:hover { background: var(--ember-hover); }
 
 /* ─── Comparison View ──────────────────────────────────────────── */
+
+.compat-score-block {
+  text-align: center;
+  padding: 2rem 1.5rem 1.75rem;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 2rem;
+}
+
+.compat-score-number {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--ember);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.3rem;
+}
+
+.compat-score-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink-mid);
+  margin-bottom: 1.25rem;
+}
+
+.compat-score-bar-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(30, 20, 10, 0.08);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.compat-score-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ember) 0%, rgba(224, 85, 30, 0.45) 100%);
+  border-radius: 100px;
+  transition: width 1.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
 
 .comparison-view {
   padding: 2rem 0 1rem;

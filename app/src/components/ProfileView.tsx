@@ -34,32 +34,40 @@ export function ProfileView({ profile, shareUrl, onShare, onRetake, lowSignal }:
 
       <section className="cuisine-section">
         <h3>Your Cuisines</h3>
-        {topCuisines.map((cuisine) => {
-          const dishes = DISH_SUGGESTIONS[cuisine.direction] ?? [];
-          return (
-            <div key={cuisine.direction} className="cuisine-result">
-              <strong>{cuisine.label}</strong>
-              {cuisine.topContributors.length > 0 && (
-                <p className="because">
-                  Because you loved {cuisine.topContributors.join(", ")}
-                </p>
-              )}
-              {dishes.length > 0 && (
-                <p className="dishes">
-                  Recipes:{" "}
-                  {dishes.slice(0, 3).map((d: DishSuggestion, i: number) => (
-                    <span key={d.name}>
-                      {i > 0 && " · "}
-                      <a href={d.url} target="_blank" rel="noopener noreferrer" className="dish-link">
-                        {d.name}
-                      </a>
-                    </span>
-                  ))}
-                </p>
-              )}
-            </div>
-          );
-        })}
+        {(() => {
+          const maxScore = Math.max(...topCuisines.map((c) => c.score), 0.001);
+          return topCuisines.map((cuisine, idx) => {
+            const barPct = Math.round((cuisine.score / maxScore) * 100);
+            const dishes = DISH_SUGGESTIONS[cuisine.direction] ?? [];
+            return (
+              <div key={cuisine.direction} className="cuisine-result">
+                <div className="cuisine-result-header">
+                  <strong>{cuisine.label}</strong>
+                  <span className="cuisine-rank">#{idx + 1}</span>
+                </div>
+                <div className="cuisine-bar-track">
+                  <div className="cuisine-bar-fill" style={{ width: `${barPct}%` }} />
+                </div>
+                {cuisine.topContributors.length > 0 && (
+                  <p className="because">Because you loved {cuisine.topContributors.join(", ")}</p>
+                )}
+                {dishes.length > 0 && (
+                  <p className="dishes">
+                    Recipes:{" "}
+                    {dishes.slice(0, 3).map((d: DishSuggestion, i: number) => (
+                      <span key={d.name}>
+                        {i > 0 && " · "}
+                        <a href={d.url} target="_blank" rel="noopener noreferrer" className="dish-link">
+                          {d.name}
+                        </a>
+                      </span>
+                    ))}
+                  </p>
+                )}
+              </div>
+            );
+          });
+        })()}
       </section>
 
       <section className="modes-section">

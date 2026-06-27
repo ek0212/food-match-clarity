@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import type { QuizCard, Rating, RatingValue } from "../engine/types";
+import { getEmoji } from "../data/ingredient-emojis";
 
 interface QuizScreenProps {
   cards: QuizCard[];
@@ -109,6 +110,7 @@ export function QuizScreen({ cards, onComplete, onQuit }: QuizScreenProps) {
       </div>
 
       <div className={cardClass} key={currentIndex}>
+        <div className="card-emoji">{getEmoji(currentCard.name)}</div>
         <h2 className="card-name">{currentCard.name}</h2>
         <p className="card-context">{currentCard.context}</p>
       </div>
