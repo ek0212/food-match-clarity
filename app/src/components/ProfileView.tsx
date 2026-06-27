@@ -3,6 +3,7 @@
  */
 
 import type { Profile } from "../engine/types";
+import { DISH_SUGGESTIONS } from "../data/dish-suggestions";
 
 interface ProfileViewProps {
   profile: Profile;
@@ -33,16 +34,24 @@ export function ProfileView({ profile, shareUrl, onShare, onRetake, lowSignal }:
 
       <section className="cuisine-section">
         <h3>Your Cuisines</h3>
-        {topCuisines.map((cuisine) => (
-          <div key={cuisine.direction} className="cuisine-result">
-            <strong>{cuisine.label}</strong>
-            {cuisine.topContributors.length > 0 && (
-              <p className="because">
-                Because you loved {cuisine.topContributors.join(", ")}
-              </p>
-            )}
-          </div>
-        ))}
+        {topCuisines.map((cuisine) => {
+          const dishes = DISH_SUGGESTIONS[cuisine.direction] ?? [];
+          return (
+            <div key={cuisine.direction} className="cuisine-result">
+              <strong>{cuisine.label}</strong>
+              {cuisine.topContributors.length > 0 && (
+                <p className="because">
+                  Because you loved {cuisine.topContributors.join(", ")}
+                </p>
+              )}
+              {dishes.length > 0 && (
+                <p className="dishes">
+                  Try: {dishes.slice(0, 3).join(" · ")}
+                </p>
+              )}
+            </div>
+          );
+        })}
       </section>
 
       <section className="modes-section">
@@ -51,15 +60,15 @@ export function ProfileView({ profile, shareUrl, onShare, onRetake, lowSignal }:
           <div key={mode.modeIndex} className="mode-result">
             <strong>{mode.label}</strong>
             <p className="mode-examples">
-              Think: {mode.examples.join(", ")}
+              Your picks: {mode.examples.join(", ")}
             </p>
           </div>
         ))}
       </section>
 
       <section className="actions-section">
-        <h3>Find Places to Eat</h3>
-        <p>Paste this into ChatGPT or any AI assistant to find matching restaurants near you:</p>
+        <h3>Find a Restaurant</h3>
+        <p>Paste this into ChatGPT or any AI assistant:</p>
         <div className="llm-prompt">
           <pre>{llmPrompt}</pre>
           <button onClick={() => navigator.clipboard.writeText(llmPrompt)}>

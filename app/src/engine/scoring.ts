@@ -151,11 +151,15 @@ export function scoreCuisines(
 
 /**
  * Score mode affinities by projecting the preference vector onto mode centroids.
+ * Examples are drawn from the user's own loved quiz ingredients, not generic members.
  *
  * Args:
  *   prefVector: Normalized preference vector.
  *   modeCentroids: Array of mode centroid vectors.
  *   modeEntries: Array of mode metadata (labels, members).
+ *   ratings: User's quiz ratings, for personalizing examples.
+ *   embeddings: Quiz ingredient embeddings.
+ *   ingredientNames: Names of quiz ingredients.
  *
  * Returns:
  *   Array of ModeAffinity sorted by score descending.
@@ -163,16 +167,42 @@ export function scoreCuisines(
 export function scoreModes(
   prefVector: number[],
   modeCentroids: number[][],
-  modeEntries: { label: string; members: string[] }[]
+  modeEntries: { label: string; members: string[] }[],
+  ratings: Rating[],
+  embeddings: number[][],
+  ingredientNames: string[]
 ): ModeAffinity[] {
-  const affinities: ModeAffinity[] = modeEntries.map((mode, i) => ({
-    modeIndex: i,
-    label: mode.label,
-    score: dot(prefVector, modeCentroids[i]),
-    examples: mode.members.slice(0, 4),
-  }));
+  const lovedRatings = ratings.filter((r) => r.value > 0);
+
+  const affinities: ModeAffinity[] = modeEntries.map((mode, i) => {
+    const modeVec = modeCentroids[i];
+
+    // Pick loved quiz ingredients that project most strongly onto this mode.
+    const contributors = lovedRatings
+      .map((r) => ({
+        name: ingredientNames[r.ingredientIndex],
+        score: dot(embeddings[r.ingredientIndex], modeVec),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 4)
+      .map((c) => c.name);
+
+    return {
+      modeIndex: i,
+      label: mode.label,
+      score: dot(prefVector, modeVec),
+      examples: contributors.length > 0 ? contributors : mode.members.slice(0, 4),
+    };
+  });
 
   return affinities.sort((a, b) => b.score - a.score);
+}
+
+/**
+ * Return the first two meaningful words of a mode label for deduplication.
+ */
+function modeTheme(label: string): string {
+  return label.toLowerCase().split(/\s+/).slice(0, 2).join(" ");
 }
 
 /**
@@ -210,7 +240,26 @@ export function buildProfile(
     ingredientNames
   );
 
-  const modeAffinities = scoreModes(prefVector, modeCentroids, modeEntries);
+  const allModeAffinities = scoreModes(
+    prefVector,
+    modeCentroids,
+    modeEntries,
+    ratings,
+    embeddings,
+    ingredientNames
+  );
+
+  // Deduplicate: skip modes whose first-two-word theme already appeared.
+  const seenThemes = new Set<string>();
+  const modeAffinities: ModeAffinity[] = [];
+  for (const m of allModeAffinities) {
+    const theme = modeTheme(m.label);
+    if (!seenThemes.has(theme)) {
+      seenThemes.add(theme);
+      modeAffinities.push(m);
+    }
+    if (modeAffinities.length >= 10) break; // pool to pick top 5 from
+  }
 
   return {
     cuisineScores: cuisineScores.slice(0, 3),

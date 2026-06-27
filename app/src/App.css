@@ -382,6 +382,12 @@ body {
   margin-top: 0.25rem;
 }
 
+.dishes {
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
 .llm-prompt {
   background: #f0f0f0;
   border-radius: 8px;
