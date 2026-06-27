@@ -37,7 +37,7 @@ export const INGREDIENT_EMOJIS: Record<string, string> = {
   lemongrass:     "🌾",
   "fish sauce":   "🐡",
   tahini:         "🫙",
-  pomegranate:    "🍎",
+  pomegranate:    "🍇",
   harissa:        "🌶️",
   dill:           "🌿",
   beef:           "🥩",
