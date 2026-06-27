@@ -93,6 +93,10 @@ export function ComparisonView({ comparison, onRetake }: ComparisonViewProps) {
         <h3>Tonight's Suggestion</h3>
         <p className="eat-together">{eatTogether}</p>
       </section>
+
+      <div className="comparison-retake-cta">
+        <button className="share-cta-btn" onClick={onRetake}>↩ Retake the Quiz</button>
+      </div>
     </div>
   );
 }

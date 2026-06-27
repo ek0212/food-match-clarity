@@ -144,11 +144,13 @@ export function ProfileView({
 
       <section className="share-section">
         <h3>Share with a Friend</h3>
-        <p>Send your profile link. When they take the quiz, you'll see what you have in common.</p>
-        <div className="share-url">
-          <input type="text" readOnly value={shareUrl} />
-          <button onClick={onShare}>Copy Link</button>
-        </div>
+        <p style={{ fontSize: "0.9rem", color: "var(--ink-mid)", marginBottom: "1rem" }}>
+          Send them your link. When they take the quiz you'll see your compatibility score.
+        </p>
+        <button className="share-cta-btn" onClick={onShare}>
+          📋 Copy My Profile Link
+        </button>
+        <p className="share-cta-hint">{shareUrl}</p>
       </section>
     </div>
   );
