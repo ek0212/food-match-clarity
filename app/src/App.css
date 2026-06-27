@@ -157,6 +157,10 @@ body {
   animation: cardExitUp 0.25s ease forwards;
 }
 
+.card-exit-down {
+  animation: cardExitDown 0.25s ease forwards;
+}
+
 @keyframes cardEnter {
   from {
     opacity: 0;
@@ -187,6 +191,19 @@ body {
     opacity: 0;
     transform: translateY(-40px) scale(0.9);
   }
+}
+
+@keyframes cardExitDown {
+  to {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+  }
+}
+
+.key-hint {
+  font-size: 0.75rem;
+  opacity: 0.5;
+  margin: 0 2px;
 }
 
 .card-name {

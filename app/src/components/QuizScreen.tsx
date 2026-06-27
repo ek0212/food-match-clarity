@@ -2,7 +2,7 @@
  * Quiz component: shows ingredient cards one at a time and collects ratings.
  */
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { QuizCard, Rating, RatingValue } from "../engine/types";
 
 interface QuizScreenProps {
@@ -18,7 +18,7 @@ export function QuizScreen({ cards, onComplete }: QuizScreenProps) {
     () => new Array(cards.length).fill(null)
   );
   const [animating, setAnimating] = useState(false);
-  const [animDirection, setAnimDirection] = useState<"left" | "right" | "up" | "">(
+  const [animDirection, setAnimDirection] = useState<"left" | "right" | "up" | "down" | "">(
     ""
   );
 
@@ -26,15 +26,16 @@ export function QuizScreen({ cards, onComplete }: QuizScreenProps) {
   const progress = ((currentIndex + 1) / cards.length) * 100;
 
   function handleRate(value: RatingValue): void {
-    const direction = value === 1 ? "right" : value === -1 ? "left" : "up";
+    // Love → left, Fine → up, Not for me → right
+    const direction = value === 1 ? "left" : value === -1 ? "right" : "up";
     animateAndRecord({ type: "rated", value }, direction);
   }
 
   function handleSkip(): void {
-    animateAndRecord({ type: "skipped" }, "up");
+    animateAndRecord({ type: "skipped" }, "down");
   }
 
-  function animateAndRecord(response: CardResponse, direction: "left" | "right" | "up"): void {
+  function animateAndRecord(response: CardResponse, direction: "left" | "right" | "up" | "down"): void {
     if (animating) return;
     setAnimating(true);
     setAnimDirection(direction);
@@ -67,6 +68,21 @@ export function QuizScreen({ cards, onComplete }: QuizScreenProps) {
     onComplete(ratings);
   }
 
+  const handleKeyDown = useCallback((e: KeyboardEvent): void => {
+    if (animating) return;
+    switch (e.key) {
+      case "ArrowLeft":  handleRate(1);   break; // Love
+      case "ArrowRight": handleRate(-1);  break; // Not for me
+      case "ArrowUp":    handleRate(0);   break; // Fine
+      case "ArrowDown":  handleSkip();    break; // Skip
+    }
+  }, [animating, currentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
+
   const cardClass = `card ${animDirection ? `card-exit-${animDirection}` : "card-enter"}`;
 
   return (
@@ -83,22 +99,19 @@ export function QuizScreen({ cards, onComplete }: QuizScreenProps) {
 
       <div className="rating-buttons">
         <button className="rate-btn love" onClick={() => handleRate(1)} disabled={animating}>
-          Love it
+          <span className="key-hint">←</span> Love it
         </button>
         <button className="rate-btn fine" onClick={() => handleRate(0)} disabled={animating}>
-          It's fine
+          <span className="key-hint">↑</span> It's fine
         </button>
         <button className="rate-btn not-for-me" onClick={() => handleRate(-1)} disabled={animating}>
-          Not for me
+          Not for me <span className="key-hint">→</span>
         </button>
       </div>
 
       <div className="skip-buttons">
         <button className="skip-btn" onClick={handleSkip} disabled={animating}>
-          Can't eat
-        </button>
-        <button className="skip-btn" onClick={handleSkip} disabled={animating}>
-          Don't know
+          <span className="key-hint">↓</span> Can't eat / Skip
         </button>
       </div>
     </div>
