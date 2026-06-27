@@ -10,6 +10,7 @@ interface IntroScreenProps {
 export function IntroScreen({ onStart, hasFriendProfile }: IntroScreenProps) {
   return (
     <div className="intro-screen">
+      <div className="intro-logo">✦</div>
       <h1>Food Match</h1>
       <p className="subtitle">Find your palate. Find what to eat together.</p>
 
@@ -19,6 +20,8 @@ export function IntroScreen({ onStart, hasFriendProfile }: IntroScreenProps) {
           <p>Take the quiz to see what you have in common and what to eat together.</p>
         </div>
       )}
+
+      <div className="intro-divider">How it works</div>
 
       <div className="intro-explanation">
         <p>
@@ -38,7 +41,7 @@ export function IntroScreen({ onStart, hasFriendProfile }: IntroScreenProps) {
       </div>
 
       <button className="start-button" onClick={onStart}>
-        {hasFriendProfile ? "Take the Quiz & Compare" : "Take the Quiz"}
+        {hasFriendProfile ? "Take the Quiz & Compare" : "Start the Quiz"}
       </button>
 
       <p className="attribution">
