@@ -121,7 +121,7 @@ export function QuizScreen({ cards, onComplete, onQuit }: QuizScreenProps) {
           <span className="key-hint">↑</span> It's fine
         </button>
         <button className="rate-btn not-for-me" onClick={() => handleRate(-1)} disabled={animating}>
-          Not for me <span className="key-hint">→</span>
+          <span className="key-hint">→</span> Not for me
         </button>
       </div>
 
