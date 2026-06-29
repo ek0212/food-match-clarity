@@ -51,6 +51,7 @@ export function IntroScreen({ onStart, onExplore, hasFriendProfile }: IntroScree
     <div className="intro-screen">
 
       {/* ── Flavor map ── */}
+      <div className="flavor-map-wrap">
       <div className="flavor-map" aria-label="Ingredient flavor map">
         <div className="flavor-dust" />
         {CLUSTERS.map((c, ci) => (
@@ -75,6 +76,7 @@ export function IntroScreen({ onStart, onExplore, hasFriendProfile }: IntroScree
           </div>
         ))}
       </div>
+      </div>{/* flavor-map-wrap */}
 
       <h1>Food Match</h1>
       <p className="subtitle">Find your palate. Find what to eat together.</p>
