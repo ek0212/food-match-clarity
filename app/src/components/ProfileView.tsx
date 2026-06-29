@@ -58,13 +58,11 @@ export function ProfileView({
     groups[group].push(r);
   }
 
-  const sortedGroups = Object.entries(groups)
-    .filter(([, items]) => items.some(r => r.value !== 0))
-    .sort(([, a], [, b]) => {
-      const loveA = a.filter((r) => r.value === 1).length;
-      const loveB = b.filter((r) => r.value === 1).length;
-      return loveB - loveA;
-    });
+  const sortedGroups = Object.entries(groups).sort(([, a], [, b]) => {
+    const loveA = a.filter((r) => r.value === 1).length;
+    const loveB = b.filter((r) => r.value === 1).length;
+    return loveB - loveA;
+  });
 
   return (
     <div className="profile-view">
@@ -95,6 +93,9 @@ export function ProfileView({
                 <div className="cuisine-bar-track">
                   <div className="cuisine-bar-fill" style={{ width: `${barPct}%` }} />
                 </div>
+                {cuisine.topContributors.length > 0 && (
+                  <p className="because">Because you loved {cuisine.topContributors.join(", ")}</p>
+                )}
                 {dishes.length > 0 && (
                   <p className="dishes">
                     Recipes:{" "}
@@ -123,14 +124,12 @@ export function ProfileView({
                 <div className="cluster-label">{groupName}</div>
                 <div className="cluster-pills">
                   {items.map((r) => (
-                    r.value !== 0 && (
                     <span
                       key={r.name}
-                      className={`ingredient-pill ${r.value === 1 ? "loved" : "disliked"}`}
+                      className={`ingredient-pill ${r.value === 1 ? "loved" : r.value === -1 ? "disliked" : "fine"}`}
                     >
                       {getEmoji(r.name)} {r.name}
                     </span>
-                    )
                   ))}
                 </div>
               </div>

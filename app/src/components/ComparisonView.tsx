@@ -34,6 +34,8 @@ export function ComparisonView({ comparison, onRetake }: ComparisonViewProps) {
         </div>
       </div>
 
+      <h2>Your Food Compatibility</h2>
+
       <section className="shared-section">
         <h3>What You Both Love</h3>
         <p className="summary">{sharedGround.summary}</p>

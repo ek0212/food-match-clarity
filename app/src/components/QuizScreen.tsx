@@ -112,6 +112,7 @@ export function QuizScreen({ cards, onComplete, onQuit }: QuizScreenProps) {
       <div className={cardClass} key={currentIndex}>
         <div className="card-emoji">{getEmoji(currentCard.name)}</div>
         <h2 className="card-name">{currentCard.name}</h2>
+        <p className="card-context">{currentCard.context}</p>
       </div>
 
       <div className="rating-buttons">
