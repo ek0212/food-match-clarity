@@ -825,3 +825,280 @@ body {
   .how-step { grid-template-columns: 46px 1fr; gap: 14px; font-size: 15px; }
   .how-icon { width: 44px; height: 44px; font-size: 20px; }
 }
+
+/* ─── Explore button on intro ──────────────────────────────────── */
+
+.explore-btn {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.65rem 2rem;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  color: var(--mint);
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.explore-btn:hover {
+  background: var(--mint-tint);
+  border-color: var(--mint);
+}
+
+/* ─── Explore Screen ───────────────────────────────────────────── */
+
+.explore-screen {
+  padding: 0.75rem 0 2rem;
+}
+
+.explore-topbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.explore-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.explore-subtitle {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin: 0 0 1.25rem;
+  line-height: 1.6;
+}
+
+.explore-subtitle b { color: var(--mint); }
+
+.explore-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.explore-search {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.explore-search:focus { border-color: var(--mint); }
+.explore-search::placeholder { color: var(--ink-soft); }
+
+.explore-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.explore-filter-btn {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.explore-filter-btn:hover { background: var(--mint-tint); color: var(--mint); }
+.explore-filter-btn.active { background: var(--mint); color: #042521; border-color: var(--mint); }
+
+/* Detail panel */
+.explore-detail {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.explore-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.explore-detail-emoji { font-size: 2.25rem; line-height: 1; }
+
+.explore-detail-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ink);
+  display: block;
+}
+
+.explore-detail-group {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+}
+
+.explore-close-btn {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s;
+  flex-shrink: 0;
+}
+
+.explore-close-btn:hover { background: var(--mint-tint); color: var(--mint); }
+
+.explore-detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.explore-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  margin-bottom: 0.5rem;
+  font-family: var(--font-mono);
+}
+
+.explore-aff-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 36px;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.explore-aff-label {
+  font-size: 0.8rem;
+  color: var(--ink-mid);
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.explore-aff-track {
+  height: 6px;
+  background: rgba(168,246,176,.1);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.explore-aff-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
+  opacity: 0.85;
+}
+
+.explore-aff-pct {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  text-align: right;
+}
+
+.explore-similar-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.explore-similar-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.75rem;
+  background: var(--mint-tint);
+  border: 1px solid rgba(168,246,176,.25);
+  border-radius: 100px;
+  color: var(--mint);
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.12s, filter 0.12s;
+}
+
+.explore-similar-pill:hover { filter: brightness(1.15); }
+
+/* Grid */
+.explore-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.explore-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, transform 0.1s;
+  font-family: var(--font-body);
+}
+
+.explore-card:hover { background: var(--bg-warm); border-color: rgba(168,246,176,.35); }
+.explore-card.active { border-color: var(--mint); background: var(--mint-tint); }
+.explore-card:active { transform: scale(0.96); }
+
+.explore-card-emoji { font-size: 1.6rem; line-height: 1; }
+.explore-card-name  { font-size: 0.8rem; font-weight: 700; color: var(--ink); text-align: center; }
+.explore-card-cuisine { font-size: 0.65rem; font-weight: 700; text-align: center; opacity: 0.9; }
+
+.explore-footer-note {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  text-align: center;
+  margin-top: 1.5rem;
+  line-height: 1.6;
+}
+
+.explore-footer-note a { color: var(--mint); }
+
+@media (max-width: 480px) {
+  .explore-aff-row { grid-template-columns: 120px 1fr 32px; }
+  .explore-grid { grid-template-columns: repeat(2, 1fr); }
+}

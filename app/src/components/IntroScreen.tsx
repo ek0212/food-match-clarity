@@ -4,6 +4,7 @@
 
 interface IntroScreenProps {
   onStart: () => void;
+  onExplore: () => void;
   hasFriendProfile: boolean;
 }
 
@@ -45,7 +46,7 @@ const LABELS = [
   { cls: 'l5', text: 'M3 · East Asian\nStir-Fry',       right: true  },
 ];
 
-export function IntroScreen({ onStart, hasFriendProfile }: IntroScreenProps) {
+export function IntroScreen({ onStart, onExplore, hasFriendProfile }: IntroScreenProps) {
   return (
     <div className="intro-screen">
 
@@ -112,6 +113,10 @@ export function IntroScreen({ onStart, hasFriendProfile }: IntroScreenProps) {
 
       <button className="start-button" onClick={onStart}>
         🌱 {hasFriendProfile ? "TAKE THE QUIZ & COMPARE" : "START THE QUIZ"}
+      </button>
+
+      <button className="explore-btn" onClick={onExplore}>
+        🔭 Explore the Flavor Map
       </button>
 
       <div className="intro-ingredients" aria-hidden="true">

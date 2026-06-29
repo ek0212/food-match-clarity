@@ -9,6 +9,7 @@ import { IntroScreen } from "./components/IntroScreen";
 import { QuizScreen } from "./components/QuizScreen";
 import { ProfileView } from "./components/ProfileView";
 import { ComparisonView } from "./components/ComparisonView";
+import { ExploreScreen } from "./components/ExploreScreen";
 import {
   buildProfile,
   getShareableUrl,
@@ -21,7 +22,7 @@ import { CUISINE_DIRECTIONS } from "./data/cuisine-directions";
 import { EMBEDDINGS, CUISINE_VECTORS, MODE_CENTROIDS, MODE_ENTRIES } from "./data/embeddings";
 import "./App.css";
 
-type AppPhase = "intro" | "quiz" | "profile" | "compare";
+type AppPhase = "intro" | "quiz" | "profile" | "compare" | "explore";
 
 const LOW_SIGNAL_THRESHOLD = 15;
 
@@ -106,6 +107,7 @@ function App() {
       {phase === "intro" && (
         <IntroScreen
           onStart={handleStartQuiz}
+          onExplore={() => setPhase("explore")}
           hasFriendProfile={friendProfile !== null}
         />
       )}
@@ -137,6 +139,10 @@ function App() {
           />
           <ComparisonView comparison={comparison} onRetake={handleRetake} />
         </div>
+      )}
+
+      {phase === "explore" && (
+        <ExploreScreen onHome={() => setPhase("intro")} />
       )}
     </div>
   );
