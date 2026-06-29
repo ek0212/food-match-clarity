@@ -986,6 +986,58 @@ body {
 .explore-filter-btn:hover  { background: var(--blue-tint); color: var(--blue); }
 .explore-filter-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
 
+/* ── Pairings panel ──────────────────────────────────────────────── */
+
+.pairing-toggle {
+  display: flex;
+  gap: 0;
+  background: var(--bg);
+  border: 1px solid rgba(61,130,214,.2);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  margin-bottom: 0.875rem;
+  width: fit-content;
+}
+
+.pairing-toggle-btn {
+  padding: 0.35rem 0.85rem;
+  border: none;
+  border-radius: calc(var(--radius-sm) - 3px);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background .12s, color .12s;
+  white-space: nowrap;
+}
+
+.pairing-toggle-btn:hover  { color: var(--blue); }
+.pairing-toggle-btn.active { background: var(--blue); color: white; }
+
+.pairing-headline {
+  font-size: 0.95rem;
+  color: var(--ink-mid);
+  margin: 0 0 0.75rem;
+  line-height: 1.5;
+}
+.pairing-headline b { color: var(--ink); }
+
+.pairing-note {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  margin: 0.75rem 0 0;
+  font-style: italic;
+}
+
+.kind-description {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  margin: 0.25rem 0 0;
+  font-style: italic;
+}
+
 /* ── SLERP panel ─────────────────────────────────────────────────── */
 
 .slerp-case-grid {
@@ -1061,7 +1113,7 @@ body {
 
 .slerp-result-row {
   display: grid;
-  grid-template-columns: 20px 1fr 80px 44px;
+  grid-template-columns: 20px 1fr 1fr;
   align-items: center;
   gap: 0.5rem;
 }

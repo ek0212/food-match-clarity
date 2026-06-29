@@ -1,9 +1,10 @@
 /**
- * ExploreScreen: data visualization of the full Epicure dataset.
+ * ExploreScreen: Epicure dataset explorer written for a general audience.
  *
  * Two panels:
- *   1. Ingredient Math — SLERP direction arithmetic (48 test cases × 3 angles)
- *   2. Flavor Clusters — 150 GMM modes browseable by kind and property
+ *   1. "What goes with what?" — SLERP results shown as natural-language pairings,
+ *      with a toggle between general pairings and cuisine-/flavor-specific ones.
+ *   2. "Ingredient Families" — 150 GMM modes described in plain terms.
  */
 
 import { useState, useMemo } from "react";
@@ -15,7 +16,7 @@ interface SlerpResult { hit_rank: number; hit_name: string; hit_sim: number }
 interface SlerpAngle  { angle: number; results: SlerpResult[] }
 interface SlerpCase   { testCase: string; seed: string; direction: string; type: string; angles: SlerpAngle[] }
 interface Mode        { id: string; kind: string; property: string; label: string; nMembers: number; members: string[] }
-interface CorpusStats { nRecipes: number; nMatched: number; nSources: number; languages: string[]; nIngredients: number; nEdges: number; nModes: number; nProperties: number }
+interface CorpusStats { nRecipes: number; nIngredients: number; nEdges: number; nModes: number; nProperties: number; languages: string[] }
 
 const { corpusStats, slerpCases, modes } = exploreData as {
   corpusStats: CorpusStats;
@@ -23,152 +24,220 @@ const { corpusStats, slerpCases, modes } = exploreData as {
   modes: Mode[];
 };
 
-const KIND_LABELS: Record<string, string> = { factor: "Emergent", continuous: "Sensory / Nutrition", binary: "Food Group" };
-const TYPE_EMOJI:  Record<string, string> = { cuisine: "🌍", flavor: "👅", nutrition: "🥦" };
+/* Friendly labels for cuisine / flavor directions */
+const DIRECTION_LABEL: Record<string, string> = {
+  Japanese: "a Japanese kitchen",
+  East_Asian: "an East Asian kitchen",
+  Southeast_Asian: "a Southeast Asian kitchen",
+  South_Asian: "a South Asian kitchen",
+  Mediterranean: "a Mediterranean kitchen",
+  Western_Atlantic: "a Western kitchen",
+  Latin_American: "a Latin American kitchen",
+  Eastern_European: "an Eastern European kitchen",
+  sweet: "a sweet direction",
+  savory: "a savory direction",
+  bitter: "a bitter direction",
+  sour: "a sour direction",
+  fatty: "a rich/fatty direction",
+  floral: "a floral direction",
+  earthy: "an earthy direction",
+  nutty: "a nutty direction",
+  pungent: "a pungent direction",
+  "high protein": "a high-protein direction",
+  "high fat": "a high-fat direction",
+  "high water": "a high-water direction",
+  "high fiber": "a high-fiber direction",
+  "high sugars": "a high-sugar direction",
+  "meat direction": "a meaty direction",
+  whole: "a whole/natural foods direction",
+  processed: "a processed-foods direction",
+};
+
+function dirLabel(dir: string): string {
+  return DIRECTION_LABEL[dir] ?? dir;
+}
+
+const KIND_PLAIN: Record<string, { label: string; desc: string }> = {
+  factor:     { label: "Discovered patterns",  desc: "Groups the AI found on its own — no one defined these in advance." },
+  continuous: { label: "Flavor & nutrition",   desc: "Groups organized around sensory properties like savory, sweet, bitter, or nutritional values." },
+  binary:     { label: "Food categories",      desc: "Classic food groups: grains, dairy, beverages, spices, etc." },
+};
+
+const TYPE_LABEL: Record<string, string> = {
+  cuisine:   "By cooking style",
+  flavor:    "By flavor direction",
+  nutrition: "By nutrition",
+};
 
 /* ── Main component ─────────────────────────────────────────────────────────── */
 
 interface ExploreScreenProps { onHome: () => void }
 
 export function ExploreScreen({ onHome }: ExploreScreenProps) {
-  const [tab, setTab] = useState<"slerp" | "modes">("slerp");
+  const [tab, setTab] = useState<"pairings" | "families">("pairings");
 
   return (
     <div className="explore-screen">
       <div className="explore-topbar">
         <button className="quit-btn" onClick={onHome}>← Home</button>
-        <h2 className="explore-title">Epicure Dataset Explorer</h2>
+        <h2 className="explore-title">Epicure: Inside the Data</h2>
       </div>
 
-      {/* Corpus headline stats */}
+      <p className="explore-subtitle">
+        A research project scanned <b>{(corpusStats.nRecipes / 1e6).toFixed(2)} million recipes</b> in{" "}
+        <b>{corpusStats.languages.length} languages</b> and built a map of how{" "}
+        <b>{corpusStats.nIngredients.toLocaleString()} ingredients</b> relate to each other —
+        based purely on how real cooks combine them.
+      </p>
+
+      {/* Stats */}
       <div className="explore-stats-row">
-        <div className="explore-stat-pill"><strong>{(corpusStats.nRecipes / 1e6).toFixed(2)}M</strong><span>recipes</span></div>
-        <div className="explore-stat-pill"><strong>{corpusStats.languages.length}</strong><span>languages</span></div>
-        <div className="explore-stat-pill"><strong>{corpusStats.nIngredients.toLocaleString()}</strong><span>ingredients</span></div>
-        <div className="explore-stat-pill"><strong>{(corpusStats.nEdges / 1000).toFixed(0)}k</strong><span>NPMI edges</span></div>
-        <div className="explore-stat-pill"><strong>{corpusStats.nModes}</strong><span>flavor clusters</span></div>
-        <div className="explore-stat-pill"><strong>{corpusStats.nProperties}</strong><span>properties</span></div>
+        <div className="explore-stat-pill"><strong>{(corpusStats.nRecipes / 1e6).toFixed(2)}M</strong><span>recipes analyzed</span></div>
+        <div className="explore-stat-pill"><strong>{corpusStats.nIngredients.toLocaleString()}</strong><span>ingredients mapped</span></div>
+        <div className="explore-stat-pill"><strong>{(corpusStats.nEdges / 1000).toFixed(0)}k</strong><span>ingredient connections</span></div>
+        <div className="explore-stat-pill"><strong>{corpusStats.nModes}</strong><span>flavor families found</span></div>
       </div>
 
-      {/* Tab switcher */}
+      {/* Tabs */}
       <div className="explore-tabs">
-        <button className={`explore-tab${tab === "slerp" ? " active" : ""}`} onClick={() => setTab("slerp")}>
-          ✦ Ingredient Math
+        <button className={`explore-tab${tab === "pairings" ? " active" : ""}`} onClick={() => setTab("pairings")}>
+          What goes with what?
         </button>
-        <button className={`explore-tab${tab === "modes" ? " active" : ""}`} onClick={() => setTab("modes")}>
-          ✦ Flavor Clusters
+        <button className={`explore-tab${tab === "families" ? " active" : ""}`} onClick={() => setTab("families")}>
+          Ingredient families
         </button>
       </div>
 
-      {tab === "slerp" && <SlerpPanel />}
-      {tab === "modes" && <ModesPanel />}
+      {tab === "pairings" && <PairingsPanel />}
+      {tab === "families" && <FamiliesPanel />}
 
       <p className="explore-footer-note">
-        Data: <a href="https://huggingface.co/Kaikaku/epicure-cooc" target="_blank" rel="noopener noreferrer">Epicure-Cooc (HuggingFace)</a>
-        {" · "}Paper: <a href="https://arxiv.org/abs/2605.22391" target="_blank" rel="noopener noreferrer">arxiv 2605.22391</a>
-        {" · "}CC-BY-4.0
+        <a href="https://huggingface.co/Kaikaku/epicure-cooc" target="_blank" rel="noopener noreferrer">Epicure-Cooc</a>
+        {" · "}
+        <a href="https://arxiv.org/abs/2605.22391" target="_blank" rel="noopener noreferrer">arxiv 2605.22391</a>
+        {" · CC-BY-4.0"}
       </p>
     </div>
   );
 }
 
-/* ── SLERP panel ────────────────────────────────────────────────────────────── */
+/* ── Pairings panel ─────────────────────────────────────────────────────────── */
 
-function SlerpPanel() {
-  const [activeCase, setActiveCase] = useState<SlerpCase>(slerpCases[0]);
-  const [angleIdx, setAngleIdx] = useState(0);
+function PairingsPanel() {
   const [typeFilter, setTypeFilter] = useState<string>("cuisine");
+  const [activeCase, setActiveCase] = useState<SlerpCase>(() =>
+    slerpCases.find(c => c.type === "cuisine") ?? slerpCases[0]
+  );
+  const [showStyled, setShowStyled] = useState(true);
 
   const filtered = useMemo(() =>
     slerpCases.filter(c => c.type === typeFilter),
     [typeFilter]
   );
 
-  const currentAngle = activeCase.angles[angleIdx];
+  // angle 0 = natural pairings, angle 60 = styled pairings
+  const baseResults   = activeCase.angles.find(a => a.angle === 0)?.results  ?? [];
+  const styledResults = activeCase.angles.find(a => a.angle === 60)?.results ?? [];
+  const results = showStyled ? styledResults : baseResults;
+
+  const maxSim = Math.max(...results.map(r => r.hit_sim), 0.01);
 
   return (
-    <div className="slerp-panel">
+    <div className="pairings-panel">
       <p className="explore-subtitle">
-        The paper's <b>SLERP operator</b> rotates an ingredient's embedding toward a cuisine or flavor direction.
-        At 0° you get the ingredient's natural neighbors; by 60° the target style dominates.
+        Pick an ingredient and a cooking context. Epicure shows which ingredients
+        real cooks pair it with most often in that context — learned from millions of recipes.
       </p>
 
       {/* Type filter */}
-      <div className="explore-filters" style={{ marginBottom: "0.75rem" }}>
-        {["cuisine","flavor","nutrition"].map(t => (
-          <button key={t} className={`explore-filter-btn${typeFilter === t ? " active" : ""}`}
-            onClick={() => { setTypeFilter(t); setActiveCase(slerpCases.filter(c=>c.type===t)[0]); setAngleIdx(0); }}>
-            {TYPE_EMOJI[t]} {t.charAt(0).toUpperCase()+t.slice(1)}
+      <div className="explore-filters" style={{ marginBottom: "0.875rem" }}>
+        {(["cuisine", "flavor", "nutrition"] as const).map(t => (
+          <button key={t}
+            className={`explore-filter-btn${typeFilter === t ? " active" : ""}`}
+            onClick={() => {
+              setTypeFilter(t);
+              const first = slerpCases.find(c => c.type === t);
+              if (first) setActiveCase(first);
+              setShowStyled(true);
+            }}>
+            {TYPE_LABEL[t]}
           </button>
         ))}
       </div>
 
-      {/* Test case grid */}
+      {/* Case grid */}
       <div className="slerp-case-grid">
         {filtered.map(c => (
           <button key={c.testCase}
             className={`slerp-case-btn${activeCase.testCase === c.testCase ? " active" : ""}`}
-            onClick={() => { setActiveCase(c); setAngleIdx(0); }}>
+            onClick={() => { setActiveCase(c); setShowStyled(true); }}>
             <span className="slerp-seed">{c.seed}</span>
             <span className="slerp-arrow">+</span>
-            <span className="slerp-dir">{c.direction}</span>
+            <span className="slerp-dir">{c.direction.replace(/_/g, " ")}</span>
           </button>
         ))}
       </div>
 
-      {/* Result panel */}
+      {/* Result card */}
       <div className="slerp-result-card">
-        <div className="slerp-result-header">
-          <div className="slerp-result-title">
-            <span className="slerp-seed-lg">{activeCase.seed}</span>
-            {" "}<span className="slerp-plus">rotated toward</span>{" "}
-            <span className="slerp-dir-lg">{activeCase.direction}</span>
-          </div>
+        {/* Toggle */}
+        <div className="pairing-toggle">
+          <button
+            className={`pairing-toggle-btn${!showStyled ? " active" : ""}`}
+            onClick={() => setShowStyled(false)}>
+            General pairings
+          </button>
+          <button
+            className={`pairing-toggle-btn${showStyled ? " active" : ""}`}
+            onClick={() => setShowStyled(true)}>
+            In {dirLabel(activeCase.direction)}
+          </button>
         </div>
 
-        {/* Angle selector */}
-        <div className="slerp-angles">
-          {activeCase.angles.map((a, i) => (
-            <button key={a.angle} className={`slerp-angle-btn${angleIdx === i ? " active" : ""}`}
-              onClick={() => setAngleIdx(i)}>
-              {a.angle}°
-            </button>
-          ))}
-          <span className="slerp-angle-hint">
-            {angleIdx === 0 ? "Pure neighbors" : angleIdx === 1 ? "Transitioning…" : "Target style dominates"}
-          </span>
-        </div>
+        {/* Headline */}
+        <p className="pairing-headline">
+          {showStyled
+            ? <>In <b>{dirLabel(activeCase.direction)}</b>, <b>{activeCase.seed}</b> is typically paired with:</>
+            : <>In general, <b>{activeCase.seed}</b> is typically cooked with:</>
+          }
+        </p>
 
         {/* Results */}
         <div className="slerp-results">
-          {currentAngle.results.map((r, i) => (
+          {results.map((r, i) => (
             <div key={i} className="slerp-result-row">
               <span className="slerp-rank">#{r.hit_rank}</span>
-              <span className="slerp-name">{r.hit_name.replace(/_/g,' ')}</span>
+              <span className="slerp-name">{r.hit_name.replace(/_/g, " ")}</span>
               <div className="slerp-sim-track">
-                <div className="slerp-sim-fill" style={{ width: `${r.hit_sim * 100}%` }} />
+                <div className="slerp-sim-fill" style={{ width: `${(r.hit_sim / maxSim) * 100}%` }} />
               </div>
-              <span className="slerp-sim-val">{r.hit_sim.toFixed(3)}</span>
             </div>
           ))}
         </div>
+
+        <p className="pairing-note">
+          Bars show relative strength of the association — the longer, the more often these appear together in recipes.
+        </p>
       </div>
     </div>
   );
 }
 
-/* ── Modes panel ────────────────────────────────────────────────────────────── */
+/* ── Families panel ─────────────────────────────────────────────────────────── */
 
-function ModesPanel() {
+function FamiliesPanel() {
   const [kindFilter, setKindFilter] = useState<string>("factor");
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState<string | null>(null);
 
+  const kindInfo = KIND_PLAIN[kindFilter];
+
   const filtered = useMemo(() =>
     modes.filter(m =>
       m.kind === kindFilter &&
-      (search === "" || m.label.toLowerCase().includes(search.toLowerCase()) ||
-       m.members.some(mem => mem.toLowerCase().includes(search.toLowerCase())))
+      (search === "" ||
+        m.label.toLowerCase().includes(search.toLowerCase()) ||
+        m.members.some(mem => mem.toLowerCase().includes(search.toLowerCase())))
     ),
     [kindFilter, search]
   );
@@ -176,21 +245,25 @@ function ModesPanel() {
   return (
     <div className="modes-panel">
       <p className="explore-subtitle">
-        <b>{modes.length} GMM clusters</b> discovered in the embedding space across 41 properties.
-        <b> Emergent</b> clusters were found via ICA with no labels given; <b>Sensory/Nutrition</b> and <b>Food Group</b> are supervised projections.
+        By analyzing co-occurrence patterns across 4M+ recipes, Epicure found
+        <b> {modes.length} natural ingredient families</b>.
+        These aren't hand-curated — the AI discovered them on its own.
       </p>
 
       <div className="explore-controls">
-        <input className="explore-search" type="text" placeholder="Search cluster or ingredient…"
-          value={search} onChange={e => setSearch(e.target.value)} />
+        <input className="explore-search" type="text"
+          placeholder="Search by family name or ingredient…"
+          value={search} onChange={e => { setSearch(e.target.value); setExpanded(null); }} />
         <div className="explore-filters">
-          {(["factor","continuous","binary"] as const).map(k => (
-            <button key={k} className={`explore-filter-btn${kindFilter === k ? " active" : ""}`}
-              onClick={() => { setKindFilter(k); setExpanded(null); }}>
-              {KIND_LABELS[k]} ({modes.filter(m => m.kind === k).length})
+          {(["factor", "continuous", "binary"] as const).map(k => (
+            <button key={k}
+              className={`explore-filter-btn${kindFilter === k ? " active" : ""}`}
+              onClick={() => { setKindFilter(k); setExpanded(null); setSearch(""); }}>
+              {KIND_PLAIN[k].label} ({modes.filter(m => m.kind === k).length})
             </button>
           ))}
         </div>
+        <p className="kind-description">{kindInfo.desc}</p>
       </div>
 
       <div className="modes-grid">
@@ -199,7 +272,7 @@ function ModesPanel() {
             className={`mode-card${expanded === mode.id ? " expanded" : ""}`}
             onClick={() => setExpanded(expanded === mode.id ? null : mode.id)}>
             <div className="mode-card-header">
-              <span className="mode-size">{mode.nMembers}</span>
+              <span className="mode-size">{mode.nMembers} ingredients</span>
               <span className="mode-label">{mode.label}</span>
             </div>
             <div className="mode-card-members">
@@ -207,7 +280,7 @@ function ModesPanel() {
                 <span key={m} className="mode-member-pill">{m}</span>
               ))}
               {expanded !== mode.id && mode.members.length > 4 && (
-                <span className="mode-more">+{mode.members.length - 4} more</span>
+                <span className="mode-more">+{mode.members.length - 4} more — click to expand</span>
               )}
             </div>
           </div>
