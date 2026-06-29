@@ -103,7 +103,7 @@ function App() {
   const lowSignal = ratingCount > 0 && ratingCount < LOW_SIGNAL_THRESHOLD;
 
   return (
-    <div className="app">
+    <div className={`app${phase === "intro" ? " app--wide" : ""}`}>
       {phase === "intro" && (
         <IntroScreen
           onStart={handleStartQuiz}

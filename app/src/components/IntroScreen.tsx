@@ -90,10 +90,10 @@ export function IntroScreen({ onStart, onExplore, hasFriendProfile }: IntroScree
 
       {/* ── Stats ── */}
       <div className="intro-stats">
-        <div className="intro-stat"><strong>📖 4M+</strong><span>RECIPES</span></div>
-        <div className="intro-stat"><strong>🌱 1,790</strong><span>INGREDIENTS</span></div>
-        <div className="intro-stat"><strong>🌐 7</strong><span>LANGUAGES</span></div>
-        <div className="intro-stat"><strong>✣ 1 MAP</strong><span>OF FLAVOR</span></div>
+        <div className="intro-stat"><strong>4.14M</strong><span>RECIPES</span></div>
+        <div className="intro-stat"><strong>1,790</strong><span>INGREDIENTS</span></div>
+        <div className="intro-stat"><strong>8</strong><span>LANGUAGES</span></div>
+        <div className="intro-stat"><strong>150</strong><span>FLAVOR CLUSTERS</span></div>
       </div>
 
       {/* ── How it works ── */}
@@ -114,11 +114,11 @@ export function IntroScreen({ onStart, onExplore, hasFriendProfile }: IntroScree
       </div>
 
       <button className="start-button" onClick={onStart}>
-        🌱 {hasFriendProfile ? "TAKE THE QUIZ & COMPARE" : "START THE QUIZ"}
+        {hasFriendProfile ? "Take the Quiz & Compare" : "Start the Quiz →"}
       </button>
 
       <button className="explore-btn" onClick={onExplore}>
-        🔭 Explore the Flavor Map
+        Explore the Data
       </button>
 
       <div className="intro-ingredients" aria-hidden="true">
