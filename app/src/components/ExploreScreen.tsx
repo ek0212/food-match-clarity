@@ -144,11 +144,6 @@ function PairingsPanel() {
 
   return (
     <div className="pairings-panel">
-      <p className="explore-subtitle">
-        Pick an ingredient and a cooking context. Epicure shows which ingredients
-        real cooks pair it with most often in that context — learned from millions of recipes.
-      </p>
-
       {/* Type filter */}
       <div className="explore-filters" style={{ marginBottom: "0.875rem" }}>
         {(["cuisine", "flavor", "nutrition"] as const).map(t => (
@@ -244,12 +239,6 @@ function FamiliesPanel() {
 
   return (
     <div className="modes-panel">
-      <p className="explore-subtitle">
-        By analyzing co-occurrence patterns across 4M+ recipes, Epicure found
-        <b> {modes.length} natural ingredient families</b>.
-        These aren't hand-curated — the AI discovered them on its own.
-      </p>
-
       <div className="explore-controls">
         <input className="explore-search" type="text"
           placeholder="Search by family name or ingredient…"

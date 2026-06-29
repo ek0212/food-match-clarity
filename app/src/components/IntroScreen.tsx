@@ -96,23 +96,6 @@ export function IntroScreen({ onStart, onExplore, hasFriendProfile }: IntroScree
         <div className="intro-stat"><strong>150</strong><span>FLAVOR CLUSTERS</span></div>
       </div>
 
-      {/* ── How it works ── */}
-      <div className="how-it-works">
-        <h2>✦ How it works</h2>
-        <div className="how-step">
-          <div className="how-icon">⌬</div>
-          <p>A research project called <b>Epicure</b> scanned over <b>4 million recipes</b> across <b>7 languages</b> and mapped how <b>1,790 ingredients</b> actually relate to each other.</p>
-        </div>
-        <div className="how-step">
-          <div className="how-icon">♡</div>
-          <p>This quiz uses that map to figure out your palate in about <b>5 minutes</b>. Rate <b>50 ingredients</b> and see your cuisine matches, dish ideas, and flavor profile.</p>
-        </div>
-        <div className="how-step">
-          <div className="how-icon">👥</div>
-          <p>Share your results with a friend. See what you both love, where you differ, and what to <b>eat together tonight</b>.</p>
-        </div>
-      </div>
-
       <button className="start-button" onClick={onStart}>
         {hasFriendProfile ? "Take the Quiz & Compare" : "Start the Quiz →"}
       </button>
@@ -121,9 +104,6 @@ export function IntroScreen({ onStart, onExplore, hasFriendProfile }: IntroScree
         Explore the Data
       </button>
 
-      <div className="intro-ingredients" aria-hidden="true">
-        <span>🌶</span><span>🌿</span><span>🧀</span><span>🧄</span><span>🍋</span><span>✺</span><span>🍜</span>
-      </div>
 
       <footer className="intro-footer">
         Powered by{' '}
